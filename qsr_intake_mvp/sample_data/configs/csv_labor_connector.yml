@@ -1,0 +1,16 @@
+name: labor_csv_demo
+version: v1
+customer_id: clave-demo
+source_system: labor_export
+source_family: file
+source_location_id: toast-nyc-001
+sample_file: sample_data/raw/labor_timecards.csv
+schedule:
+  window_start: "2026-03-01T00:00:00-05:00"
+  window_end: "2026-03-02T00:00:00-05:00"
+auth:
+  type: ftp
+  secret_ref: env:LABOR_FTP_SECRET
+params:
+  filename_regex: "labor_timecards.*\\.csv"
+  parser_profile: default_csv

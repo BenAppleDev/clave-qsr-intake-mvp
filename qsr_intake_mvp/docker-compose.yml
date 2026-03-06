@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: qsr_intake
+      POSTGRES_USER: qsr
+      POSTGRES_PASSWORD: qsr
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./sql/migrations:/docker-entrypoint-initdb.d:ro
+
+  minio:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    ports:
+      - "9000:9000"
+      - "9001:9001"

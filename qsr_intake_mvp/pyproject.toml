@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qsr-intake-mvp"
+version = "0.1.0"
+description = "QSR intake and normalization MVP scaffold"
+requires-python = ">=3.11"
+dependencies = [
+  "PyYAML>=6.0",
+  "psycopg[binary]>=3.1",
+]
+
+[tool.setuptools]
+package-dir = {"" = "python"}
+
+[tool.setuptools.packages.find]
+where = ["python"]

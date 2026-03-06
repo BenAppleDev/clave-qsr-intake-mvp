@@ -1,0 +1,4 @@
+source_inventory_event_id,source_store_id,source_item_code,source_item_name,event_type,quantity_delta,unit_of_measure,unit_cost,occurred_at,reference_document_id
+inv_7001,toast-nyc-001,BURGER_PATTY,Beef Patty,receive,50,each,1.20,2026-03-01T08:00:00-05:00,po_9001
+inv_7002,toast-nyc-001,BURGER_PATTY,Beef Patty,sale_depletion,-18,each,1.20,2026-03-01T23:50:00-05:00,close_0301
+inv_7003,toast-nyc-001,FRY_OIL,Fryer Oil,waste,-2,liters,4.50,2026-03-01T21:15:00-05:00,waste_0301

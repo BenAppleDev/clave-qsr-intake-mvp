@@ -1,0 +1,16 @@
+name: inventory_report_demo
+version: v1
+customer_id: clave-demo
+source_system: inventory_report
+source_family: report
+source_location_id: toast-nyc-001
+sample_file: sample_data/raw/inventory_report.csv
+schedule:
+  window_start: "2026-03-01T00:00:00-05:00"
+  window_end: "2026-03-02T00:00:00-05:00"
+auth:
+  type: database
+  secret_ref: env:INVENTORY_DB_DSN
+params:
+  report_name: end_of_day_inventory
+  parser_profile: default_csv

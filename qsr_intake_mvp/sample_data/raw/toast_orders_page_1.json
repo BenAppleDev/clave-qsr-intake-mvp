@@ -1,0 +1,121 @@
+{
+  "storeId": "toast-nyc-001",
+  "businessDate": "2026-03-01",
+  "orders": [
+    {
+      "guid": "ord_1001",
+      "openedDate": "2026-03-01T11:58:00-05:00",
+      "closedDate": "2026-03-01T12:10:00-05:00",
+      "state": "CLOSED",
+      "channel": "IN_STORE",
+      "totals": {
+        "gross": 12.48,
+        "net": 13.51,
+        "tax": 1.03,
+        "discount": 0.00,
+        "tip": 0.00,
+        "refund": 0.00,
+        "void": 0.00
+      },
+      "checks": [
+        {
+          "guid": "chk_2001",
+          "openedDate": "2026-03-01T11:58:00-05:00",
+          "closedDate": "2026-03-01T12:10:00-05:00",
+          "state": "CLOSED",
+          "amount": {
+            "subtotal": 12.48,
+            "tax": 1.03,
+            "total": 13.51
+          },
+          "selections": [
+            {
+              "guid": "li_3001",
+              "itemCode": "BURGER_CLASSIC",
+              "displayName": "Classic Burger",
+              "quantity": 1,
+              "unitPrice": 8.99,
+              "tax": 0.74,
+              "voided": false,
+              "comped": false,
+              "menuCategory": "Entrees"
+            },
+            {
+              "guid": "li_3002",
+              "itemCode": "FRIES_MED",
+              "displayName": "Medium Fries",
+              "quantity": 1,
+              "unitPrice": 3.49,
+              "tax": 0.29,
+              "voided": false,
+              "comped": false,
+              "menuCategory": "Sides"
+            }
+          ],
+          "payments": [
+            {
+              "guid": "pay_4001",
+              "type": "CREDIT_CARD",
+              "amount": 13.51,
+              "tipAmount": 0.00,
+              "capturedAt": "2026-03-01T12:10:03-05:00",
+              "status": "CAPTURED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "guid": "ord_1002",
+      "openedDate": "2026-03-01T12:21:00-05:00",
+      "closedDate": "2026-03-01T12:27:00-05:00",
+      "state": "CLOSED",
+      "channel": "KIOSK",
+      "totals": {
+        "gross": 2.49,
+        "net": 2.70,
+        "tax": 0.21,
+        "discount": 0.00,
+        "tip": 0.00,
+        "refund": 0.00,
+        "void": 0.00
+      },
+      "checks": [
+        {
+          "guid": "chk_2002",
+          "openedDate": "2026-03-01T12:21:00-05:00",
+          "closedDate": "2026-03-01T12:27:00-05:00",
+          "state": "CLOSED",
+          "amount": {
+            "subtotal": 2.49,
+            "tax": 0.21,
+            "total": 2.70
+          },
+          "selections": [
+            {
+              "guid": "li_3003",
+              "itemCode": "SODA_COLA",
+              "displayName": "Cola",
+              "quantity": 1,
+              "unitPrice": 2.49,
+              "tax": 0.21,
+              "voided": false,
+              "comped": false,
+              "menuCategory": "Beverages"
+            }
+          ],
+          "payments": [
+            {
+              "guid": "pay_4002",
+              "type": "GIFT_CARD",
+              "amount": 2.70,
+              "tipAmount": 0.00,
+              "capturedAt": "2026-03-01T12:27:04-05:00",
+              "status": "CAPTURED"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+CREATE INDEX IF NOT EXISTS idx_raw_objects_batch_id ON raw.raw_objects(batch_id);
+CREATE INDEX IF NOT EXISTS idx_raw_objects_source_received ON raw.raw_objects(source_system, received_at);
+CREATE INDEX IF NOT EXISTS idx_staged_parse_type ON staging.staged_records(parse_status, source_entity_type);
+CREATE INDEX IF NOT EXISTS idx_staged_raw_object ON staging.staged_records(raw_object_id);
+CREATE INDEX IF NOT EXISTS idx_orders_store_business_day ON canonical.orders(store_id, business_day_id);
+CREATE INDEX IF NOT EXISTS idx_line_items_store_key ON canonical.line_items(normalized_item_key);
+CREATE INDEX IF NOT EXISTS idx_inventory_events_store_day ON canonical.inventory_events(store_id, business_day_id);
+CREATE INDEX IF NOT EXISTS idx_record_metadata_raw_object ON meta.record_metadata(raw_object_id);
+CREATE INDEX IF NOT EXISTS idx_record_metadata_freshness ON meta.record_metadata(freshness_status);
+CREATE INDEX IF NOT EXISTS idx_crosswalk_lookup ON config.external_id_crosswalks(entity_type, source_system, external_id_value);

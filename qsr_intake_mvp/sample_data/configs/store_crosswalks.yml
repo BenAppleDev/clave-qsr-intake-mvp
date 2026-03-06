@@ -1,0 +1,9 @@
+stores:
+  toast-nyc-001:
+    store_id: store_nyc_001
+    store_code: NYC001
+    store_name: Midtown Flagship
+    brand_name: Demo Burger
+    timezone: America/New_York
+    currency: USD
+    business_day_cutoff_local_time: "04:00:00"

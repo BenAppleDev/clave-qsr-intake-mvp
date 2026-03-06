@@ -1,0 +1,8 @@
+profiles:
+  default_csv:
+    delimiter: ","
+    quotechar: '"'
+    encoding: utf-8
+    has_header: true
+    date_formats:
+      - "%Y-%m-%dT%H:%M:%S%z"

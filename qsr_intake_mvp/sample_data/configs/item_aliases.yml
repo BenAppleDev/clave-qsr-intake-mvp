@@ -1,0 +1,21 @@
+items:
+  BURGER_CLASSIC:
+    normalized_item_key: burger_classic
+    normalized_item_name: Classic Burger
+    confidence: 1.0
+  FRIES_MED:
+    normalized_item_key: fries_medium
+    normalized_item_name: Medium Fries
+    confidence: 1.0
+  SODA_COLA:
+    normalized_item_key: soda_cola
+    normalized_item_name: Cola
+    confidence: 1.0
+  BURGER_PATTY:
+    normalized_item_key: burger_patty
+    normalized_item_name: Beef Patty
+    confidence: 1.0
+  FRY_OIL:
+    normalized_item_key: fry_oil
+    normalized_item_name: Fryer Oil
+    confidence: 1.0

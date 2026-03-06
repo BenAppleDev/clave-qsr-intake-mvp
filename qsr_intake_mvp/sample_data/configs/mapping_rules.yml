@@ -1,0 +1,22 @@
+mapping_rule_sets:
+  - mapping_rule_set_id: default_qsr_rules_v1
+    source_system: toast
+    source_entity_type: orders_page
+    canonical_target_type: orders_checks_items_payments
+    transforms:
+      - split_orders
+      - split_checks
+      - split_items
+      - split_payments
+  - mapping_rule_set_id: labor_csv_v1
+    source_system: labor_export
+    source_entity_type: labor_csv
+    canonical_target_type: employees_shifts
+    transforms:
+      - parse_timecards
+  - mapping_rule_set_id: inventory_report_v1
+    source_system: inventory_report
+    source_entity_type: inventory_report
+    canonical_target_type: inventory_events
+    transforms:
+      - parse_inventory_rows
