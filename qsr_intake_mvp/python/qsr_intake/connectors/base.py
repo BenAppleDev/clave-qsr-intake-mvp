@@ -10,6 +10,7 @@ class RawEnvelope:
     customer_id: str
     source_system: str
     source_family: str
+    source_mode: str
     source_entity_type: str
     source_location_id: Optional[str]
     source_object_id: Optional[str]

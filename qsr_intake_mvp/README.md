@@ -26,6 +26,14 @@ This repo implements a **batch-first** intake pipeline for **POS + labor + inven
 PYTHONPATH=python python -m qsr_intake.pipeline.run_demo
 ```
 
+Aloha demos:
+
+```bash
+PYTHONPATH=python python -m qsr_intake.pipeline.run_demo --scenario aloha_plan_a
+PYTHONPATH=python python -m qsr_intake.pipeline.run_demo --scenario aloha_plan_b
+PYTHONPATH=python python -m qsr_intake.pipeline.run_demo --scenario all
+```
+
 Outputs are written to:
 
 ```text
@@ -37,6 +45,25 @@ demo_artifacts/
   derived/
   object_storage/
 ```
+
+## Aloha source family
+
+This MVP models Aloha as one source family with two operating modes:
+
+- `integration_enabled`: a structured local integration surface exists and a collector polls that surface.
+- `local_bridge_fallback`: no practical integration surface exists, so a dumb back-office bridge uploads raw export/report files.
+
+Both modes land immutable raw payloads and feed the same staging, normalization, canonical, metadata, and derived paths. The edge changes; the central pipeline does not.
+
+The local bridge is intentionally narrow. It only:
+
+- discovers local files
+- packages raw bytes
+- uploads with retry
+- checkpoints progress
+- reports simple health
+
+It does not normalize business entities or interpret restaurant semantics. That work stays in staging and normalization workers.
 
 ## Optional: load into PostgreSQL
 
@@ -72,4 +99,4 @@ sql/
 tests/
 ```
 
-See `docs/IMPLEMENTATION_SCAFFOLD.md` for the full service breakdown, connector contract, DDL notes, config format, dedupe strategy, and implementation plan.
+See `docs/IMPLEMENTATION_SCAFFOLD.md` for the full service breakdown, connector contract, DDL notes, config format, dedupe strategy, and implementation plan. See `docs/ALOHA_SOURCE_FAMILY.md` for the Aloha-specific design notes.

@@ -6,3 +6,15 @@ profiles:
     has_header: true
     date_formats:
       - "%Y-%m-%dT%H:%M:%S%z"
+  aloha_integration_v1:
+    structured_payload: true
+    poll_surface: local_interface_terminal
+    date_formats:
+      - "%Y-%m-%dT%H:%M:%S%z"
+  aloha_export_csv:
+    delimiter: ","
+    quotechar: '"'
+    encoding: utf-8
+    has_header: true
+    date_formats:
+      - "%Y-%m-%dT%H:%M:%S%z"

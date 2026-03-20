@@ -1,0 +1,20 @@
+name: aloha_integration_enabled_demo
+version: v1
+customer_id: clave-demo
+source_system: aloha_pos
+source_family: aloha
+source_mode: integration_enabled
+source_location_id: aloha-hou-001
+schedule:
+  window_start: "2026-03-04T00:00:00-06:00"
+  window_end: "2026-03-05T00:00:00-06:00"
+params:
+  integration_surface: interface_server_terminal
+  interface_terminal_id: BOH-IFS-01
+  poll_interval_seconds: 120
+  parser_profile: aloha_integration_v1
+  structured_integration_output: true
+  upload_target: demo_artifacts/object_storage/raw/clave-demo/aloha_pos
+  sample_files:
+    - sample_data/raw/aloha/integration_enabled/poll_2026-03-04T0400.json
+    - sample_data/raw/aloha/integration_enabled/poll_2026-03-04T1600.json

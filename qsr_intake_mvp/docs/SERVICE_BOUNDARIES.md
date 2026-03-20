@@ -6,6 +6,7 @@
 - discover / collect loops
 - checkpoint persistence
 - heartbeat emission
+- local bridge file polling and upload retries
 
 ## Worker responsibilities
 - parsing
@@ -13,6 +14,7 @@
 - normalization
 - trust scoring
 - replay
+- interpreting Aloha integration payloads and fallback exports after raw landing
 
 ## Data boundaries
 - raw: immutable source truth
@@ -20,3 +22,4 @@
 - canonical: normalized business facts
 - meta: record-level trust
 - derived: aggregates and convenience outputs
+- local bridge: collection/checkpoint/upload only, never business interpretation

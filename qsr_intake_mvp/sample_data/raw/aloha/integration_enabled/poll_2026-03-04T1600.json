@@ -1,0 +1,55 @@
+{
+  "store": {
+    "storeId": "aloha-hou-001",
+    "storeName": "Galleria Legacy"
+  },
+  "poll": {
+    "surface": "interface_server_terminal",
+    "terminalId": "BOH-IFS-01",
+    "pollStartedAt": "2026-03-04T15:58:00-06:00",
+    "pollEndedAt": "2026-03-04T16:00:00-06:00",
+    "businessDate": "2026-03-04"
+  },
+  "checks": [
+    {
+      "orderRef": "aloha_ord_1003",
+      "checkRef": "aloha_chk_2003",
+      "openedAt": "2026-03-04T18:10:00-06:00",
+      "closedAt": "2026-03-04T18:19:00-06:00",
+      "status": "CLOSED",
+      "channel": "IN_STORE",
+      "totals": {
+        "subtotal": 17.97,
+        "tax": 1.48,
+        "total": 19.45,
+        "discount": 0.00,
+        "tip": 1.50,
+        "refund": 0.00,
+        "void": 0.00
+      },
+      "items": [
+        {
+          "lineRef": "aloha_li_3004",
+          "itemCode": "BURGER_CLASSIC",
+          "displayName": "Classic Burger",
+          "quantity": 2,
+          "unitPrice": 8.99,
+          "tax": 1.48,
+          "voided": false,
+          "comped": false,
+          "menuCategory": "Entrees"
+        }
+      ],
+      "payments": [
+        {
+          "paymentRef": "aloha_pay_4003",
+          "type": "CREDIT_CARD",
+          "amount": 19.45,
+          "tipAmount": 1.50,
+          "capturedAt": "2026-03-04T18:19:07-06:00",
+          "status": "CAPTURED"
+        }
+      ]
+    }
+  ]
+}

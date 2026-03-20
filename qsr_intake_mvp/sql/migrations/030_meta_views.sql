@@ -6,6 +6,7 @@ SELECT
     staged_record_id,
     source_system,
     source_family,
+    source_mode,
     source_entity_type,
     source_primary_key,
     source_location_id,

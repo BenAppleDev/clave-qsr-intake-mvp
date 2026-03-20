@@ -1,0 +1,33 @@
+name: aloha_local_bridge_demo
+version: v1
+customer_id: clave-demo
+source_system: aloha_local_exports
+source_family: aloha
+source_mode: local_bridge_fallback
+source_location_id: aloha-hou-001
+params:
+  deployment_pattern: boh_machine_service
+  watched_directory: demo_artifacts/bridge_watch/aloha-hou-001
+  file_pattern: "*.csv"
+  file_specs:
+    - source_entity_type: aloha_checks_export
+      file_glob: "checks_*.csv"
+      parser_profile: aloha_export_csv
+    - source_entity_type: aloha_items_export
+      file_glob: "items_*.csv"
+      parser_profile: aloha_export_csv
+    - source_entity_type: aloha_payments_export
+      file_glob: "payments_*.csv"
+      parser_profile: aloha_export_csv
+  polling_interval_seconds: 5
+  upload_target: demo_artifacts/object_storage/raw/clave-demo/aloha_local_exports
+  checkpoint_path: demo_artifacts/checkpoints/aloha_local_bridge_demo.json
+  backfill_chunk_size: 1
+  backfill_chunk_by: day
+  throttle_seconds: 0.0
+  retry_backoff_seconds: 0.0
+  max_retries: 2
+  timezone: America/Chicago
+  parser_profile: aloha_export_csv
+  structured_integration_output: false
+  max_files_per_live_scan: 10

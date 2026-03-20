@@ -22,6 +22,7 @@ class ApiOrdersConnector(BaseConnector):
                 customer_id=config["customer_id"],
                 source_system=config["source_system"],
                 source_family="api",
+                source_mode=config.get("source_mode", "standard"),
                 source_entity_type="orders_page",
                 source_location_id=config.get("source_location_id"),
                 source_object_id=Path(handle).name,

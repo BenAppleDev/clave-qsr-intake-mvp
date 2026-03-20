@@ -138,7 +138,10 @@ Core pipeline:
    - representative of messy back-office exports
 3. **Inventory report connector**
    - validates POS/labor/inventory convergence
-4. **Local edge agent**
+4. **Aloha source family**
+   - `integration_enabled` for structured local polling from Aloha integration surfaces
+   - `local_bridge_fallback` for BOH file/report extraction with checkpointing and retries
+5. **Generic local edge agent hardening**
    - only after the above contracts stabilize
 
 ## 10. Sample walkthrough
@@ -200,3 +203,4 @@ Future additions:
 - `derived.daily_store_metrics` moved out of canonical truth
 - `adjustments` retained only as an optional compatibility table
 - Python owns most early connectors for speed; C++ owns the runtime/edge spine
+- Aloha remains one source family, but source mode is explicit so local structured integration and local bridge fallback share the same central pipeline

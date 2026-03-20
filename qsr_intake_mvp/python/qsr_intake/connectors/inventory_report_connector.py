@@ -22,6 +22,7 @@ class InventoryReportConnector(BaseConnector):
                 customer_id=config["customer_id"],
                 source_system=config["source_system"],
                 source_family="report",
+                source_mode=config.get("source_mode", "standard"),
                 source_entity_type="inventory_report",
                 source_location_id=config.get("source_location_id"),
                 source_object_id=Path(handle).name,

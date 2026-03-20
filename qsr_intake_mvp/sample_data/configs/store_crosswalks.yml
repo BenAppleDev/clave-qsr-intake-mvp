@@ -7,3 +7,11 @@ stores:
     timezone: America/New_York
     currency: USD
     business_day_cutoff_local_time: "04:00:00"
+  aloha-hou-001:
+    store_id: store_hou_001
+    store_code: HOU001
+    store_name: Galleria Legacy
+    brand_name: Demo Burger
+    timezone: America/Chicago
+    currency: USD
+    business_day_cutoff_local_time: "04:00:00"

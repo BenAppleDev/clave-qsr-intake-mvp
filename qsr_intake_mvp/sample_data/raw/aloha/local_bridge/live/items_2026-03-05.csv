@@ -1,0 +1,2 @@
+source_exported_at,source_store_id,source_order_id,source_check_id,source_line_id,source_item_code,display_name,quantity,unit_price,tax,voided_flag,comped_flag,menu_category,closedDate
+2026-03-05T18:30:00-06:00,aloha-hou-001,aloha_live_ord_4001,aloha_live_chk_4001,aloha_live_li_4001,BURGER_CLASSIC,Classic Burger,2,8.99,1.48,false,false,Entrees,2026-03-05T18:06:00-06:00

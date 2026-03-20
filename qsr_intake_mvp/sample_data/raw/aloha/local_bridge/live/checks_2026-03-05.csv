@@ -1,0 +1,2 @@
+source_exported_at,source_store_id,source_order_id,source_check_id,channel,state,openedDate,closedDate,subtotal,tax,total,discount,tip,refund,void
+2026-03-05T18:30:00-06:00,aloha-hou-001,aloha_live_ord_4001,aloha_live_chk_4001,IN_STORE,CLOSED,2026-03-05T17:58:00-06:00,2026-03-05T18:06:00-06:00,17.97,1.48,19.45,0.00,1.50,0.00,0.00

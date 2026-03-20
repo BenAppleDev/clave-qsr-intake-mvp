@@ -1,0 +1,2 @@
+source_exported_at,source_store_id,source_order_id,source_check_id,source_payment_id,payment_type,amount,tip_amount,captured_at,status
+2026-03-05T18:30:00-06:00,aloha-hou-001,aloha_live_ord_4001,aloha_live_chk_4001,aloha_live_pay_4001,CREDIT_CARD,19.45,1.50,2026-03-05T18:06:08-06:00,CAPTURED
