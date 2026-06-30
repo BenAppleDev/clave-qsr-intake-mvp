@@ -23,6 +23,7 @@
 - **Purpose:** map staged records into canonical business entities
 - **Language:** Python
 - **Why:** rule iteration, config-driven transforms, trust scoring, and data-quality logic move faster here
+- **Notes:** includes the hybrid token + embedding resolver for cross-store item and inventory naming drift
 
 ### metadata-trust annotator
 - **Purpose:** attach provenance, freshness, quality, and semantic confidence data
@@ -88,6 +89,8 @@ The repo includes YAML examples for:
 - source type parameters
 - field mapping rules
 - item alias rules
+- canonical item catalog rules
+- resolver thresholds, aliases, and store overrides
 - store crosswalk rules
 - parsing options
 
@@ -118,7 +121,7 @@ Core pipeline:
 1. connectors emit `RawEnvelope`
 2. raw landing persists immutable object + metadata
 3. staging parser emits source-shaped records
-4. normalizer resolves store/item/entity crosswalks
+4. normalizer resolves store/item/entity crosswalks, including hybrid token + embedding item resolution
 5. canonical rows are upserted by natural key
 6. metadata is attached by `record_uid`
 7. derived metrics are computed from canonical outputs
@@ -171,6 +174,8 @@ Tests included:
 - normalization correctness
 - idempotency
 - metadata presence
+- resolver precedence and threshold behavior
+- review-required and unresolved normalization paths
 
 Future additions:
 - config versioning validation

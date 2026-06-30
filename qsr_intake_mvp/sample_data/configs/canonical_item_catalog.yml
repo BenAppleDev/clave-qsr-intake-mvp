@@ -1,0 +1,72 @@
+version: catalog_v1
+items:
+  - normalized_item_key: burger_classic
+    normalized_item_name: Classic Burger
+    domains:
+      - line_item
+    synonyms:
+      - Burger Classic
+      - Large Classic Burger
+      - Classic Burger Large
+      - Clsc Burger
+    menu_categories:
+      - Entrees
+    price_band:
+      min: 8.50
+      max: 10.00
+  - normalized_item_key: fries_medium
+    normalized_item_name: Medium Fries
+    domains:
+      - line_item
+    synonyms:
+      - Fries Medium
+      - Medium Fries
+      - Fries
+    menu_categories:
+      - Sides
+    price_band:
+      min: 3.00
+      max: 3.80
+  - normalized_item_key: fries_large
+    normalized_item_name: Large Fries
+    domains:
+      - line_item
+    synonyms:
+      - Fries Large
+      - Large Fries
+      - Fries
+    menu_categories:
+      - Sides
+    price_band:
+      min: 4.10
+      max: 4.80
+  - normalized_item_key: soda_cola
+    normalized_item_name: Cola
+    domains:
+      - line_item
+    synonyms:
+      - Cola
+      - Fountain Cola
+      - Soda Cola
+    menu_categories:
+      - Beverages
+    price_band:
+      min: 2.00
+      max: 3.00
+  - normalized_item_key: burger_patty
+    normalized_item_name: Beef Patty
+    domains:
+      - inventory
+    synonyms:
+      - Burger Patty
+      - Beef Patties
+    unit_of_measure: each
+  - normalized_item_key: fry_oil
+    normalized_item_name: Fryer Oil
+    domains:
+      - inventory
+    synonyms:
+      - Fry Oil
+      - Oil Fryer
+      - Fryer Filter Oil
+    unit_of_measure: liters

@@ -15,3 +15,19 @@ stores:
     timezone: America/Chicago
     currency: USD
     business_day_cutoff_local_time: "04:00:00"
+  toast-chi-001:
+    store_id: store_chi_001
+    store_code: CHI001
+    store_name: River North
+    brand_name: Demo Burger
+    timezone: America/Chicago
+    currency: USD
+    business_day_cutoff_local_time: "04:00:00"
+  toast-la-001:
+    store_id: store_la_001
+    store_code: LA001
+    store_name: Sunset Plaza
+    brand_name: Demo Burger
+    timezone: America/Los_Angeles
+    currency: USD
+    business_day_cutoff_local_time: "04:00:00"

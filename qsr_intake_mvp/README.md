@@ -1,37 +1,45 @@
 # QSR Intake MVP
 
-A concrete MVP scaffold for a QSR data ingestion, normalization, and trust layer.
+A prototype data-intake and normalization layer for restaurant operations data.
+It is built for internal tools, operator workflows, and grounded AI systems that need trustworthy POS, labor, and inventory inputs.
+The local demo shows how raw source data can be preserved, normalized, and annotated with confidence and review metadata instead of being treated as clean by default.
+This repo is intentionally honest about being an MVP: it demonstrates the architecture and workflow, not a production deployment.
 
-This repo implements a **batch-first** intake pipeline for **POS + labor + inventory** data with:
+## What Is Included
 
-- reusable connector families
-- immutable raw landing in object storage
-- thin staging records
-- canonical PostgreSQL schema
-- first-class provenance / freshness / quality / confidence metadata
-- sample datasets and a runnable local demo
+- Python connectors and workers for fast MVP iteration
+- C++ runtime scaffold for long-running connector hosting
+- PostgreSQL DDL for raw, staging, canonical, metadata, config, ops, and derived layers
+- sample configs for API, CSV, inventory-report, and Aloha source patterns
+- synthetic sample datasets for local demo use
+- resolver configs for canonical item catalogs, aliases, overrides, and local embeddings
 
-## What is included
+## Quick Start
 
-- **C++ runtime scaffold** for long-running connector hosting and edge-agent style execution
-- **Python connectors + workers** for fast MVP iteration
-- **PostgreSQL DDL** for raw, staging, canonical, meta, config, ops, and derived layers
-- **Sample configs** for an API orders feed, a labor CSV feed, and an inventory report feed
-- **Sample datasets** that demonstrate the pipeline end-to-end
-- **Demo runner** that ingests sample data and writes raw, staged, canonical, metadata, and derived outputs
+Install dependencies:
 
-## Quick start
+```bash
+python -m pip install -r requirements.txt
+```
+
+Run the core demo:
 
 ```bash
 PYTHONPATH=python python -m qsr_intake.pipeline.run_demo
 ```
 
-Aloha demos:
+Run the Aloha scenarios:
 
 ```bash
 PYTHONPATH=python python -m qsr_intake.pipeline.run_demo --scenario aloha_plan_a
 PYTHONPATH=python python -m qsr_intake.pipeline.run_demo --scenario aloha_plan_b
 PYTHONPATH=python python -m qsr_intake.pipeline.run_demo --scenario all
+```
+
+Run the test suite:
+
+```bash
+pytest -q
 ```
 
 Outputs are written to:
@@ -46,57 +54,58 @@ demo_artifacts/
   object_storage/
 ```
 
-## Aloha source family
+## How The Demo Works
+
+- source-shaped payloads and files are collected
+- raw payloads are landed immutably
+- staging records keep source shape while preparing for normalization
+- canonical records are generated for orders, checks, line items, payments, shifts, and inventory events
+- metadata captures provenance, freshness, quality, confidence, and review state
+
+The core demo includes multi-store naming drift examples that produce:
+
+- exact source-code alias matches
+- high-confidence hybrid matches
+- review-required ambiguous matches
+- unresolved fallback matches
+
+## Aloha Source Family
 
 This MVP models Aloha as one source family with two operating modes:
 
-- `integration_enabled`: a structured local integration surface exists and a collector polls that surface.
-- `local_bridge_fallback`: no practical integration surface exists, so a dumb back-office bridge uploads raw export/report files.
+- `integration_enabled`: a structured local integration surface exists and a collector polls that surface
+- `local_bridge_fallback`: no practical integration surface exists, so a narrow local bridge uploads raw export or report files
 
-Both modes land immutable raw payloads and feed the same staging, normalization, canonical, metadata, and derived paths. The edge changes; the central pipeline does not.
+Both modes land immutable raw payloads and feed the same downstream staging, normalization, canonical, metadata, and derived paths.
 
-The local bridge is intentionally narrow. It only:
+## Optional Local Infrastructure
 
-- discovers local files
-- packages raw bytes
-- uploads with retry
-- checkpoints progress
-- reports simple health
-
-It does not normalize business entities or interpret restaurant semantics. That work stays in staging and normalization workers.
-
-## Optional: load into PostgreSQL
-
-1. Create a database.
-2. Apply SQL in `sql/migrations/`.
-3. Export `DATABASE_URL`.
-4. Run:
+If you want to test the PostgreSQL loading path or inspect a local object-store analogue:
 
 ```bash
-python -m qsr_intake.pipeline.load_to_postgres
+docker compose up postgres minio
 ```
 
-## Important implementation choices
+Then:
 
-This scaffold intentionally tightens the earlier design:
+1. Apply SQL in `sql/migrations/`.
+2. Export `DATABASE_URL`.
+3. Run `PYTHONPATH=python python -m qsr_intake.pipeline.load_to_postgres`.
 
-- `raw.ingestion_batches` is the single source of truth for batch metadata.
-- Record-level trust metadata is consolidated into `meta.record_metadata`.
-- `derived.daily_store_metrics` is treated as derived output, not raw truth.
-- `canonical.adjustments` exists as an optional compatibility table but is not required by the demo path.
-- C++ is used for the runtime spine and edge-agent scaffolding; Python is used for most early connectors and all transformation work.
+The Compose credentials are for local demo convenience only. Do not reuse them outside a disposable local environment.
 
-## Repo map
+## Documentation
 
-```text
-cpp/
-  connector_runtime/
-docs/
-python/
-  qsr_intake/
-sample_data/
-sql/
-tests/
-```
+- [`docs/DATA-FLOW.md`](/Users/ben/clave/qsr_intake_mvp/docs/DATA-FLOW.md)
+- [`docs/USE-CASES.md`](/Users/ben/clave/qsr_intake_mvp/docs/USE-CASES.md)
+- [`docs/HANDOFF.md`](/Users/ben/clave/qsr_intake_mvp/docs/HANDOFF.md)
+- [`docs/IMPLEMENTATION_SCAFFOLD.md`](/Users/ben/clave/qsr_intake_mvp/docs/IMPLEMENTATION_SCAFFOLD.md)
+- [`docs/ALOHA_SOURCE_FAMILY.md`](/Users/ben/clave/qsr_intake_mvp/docs/ALOHA_SOURCE_FAMILY.md)
+- [`docs/NORMALIZATION_RESOLVER.md`](/Users/ben/clave/qsr_intake_mvp/docs/NORMALIZATION_RESOLVER.md)
+- [`sample_data/README.md`](/Users/ben/clave/qsr_intake_mvp/sample_data/README.md)
 
-See `docs/IMPLEMENTATION_SCAFFOLD.md` for the full service breakdown, connector contract, DDL notes, config format, dedupe strategy, and implementation plan. See `docs/ALOHA_SOURCE_FAMILY.md` for the Aloha-specific design notes.
+## Notes On Scope
+
+- sample data is synthetic and included only for local demonstration
+- this repo favors transparency and inspectability over polish
+- the current workflow is batch-first and file-oriented by design

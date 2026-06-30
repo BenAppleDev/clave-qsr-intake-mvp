@@ -3,10 +3,38 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from qsr_intake.normalization.resolver import EmbeddingProvider
+import qsr_intake.pipeline.run_demo as run_demo_module
 from qsr_intake.pipeline.run_demo import DEMO_DIR, REPO_ROOT, run_demo
 
 
-def test_aloha_plan_a_demo_end_to_end():
+class FakeEmbeddingProvider(EmbeddingProvider):
+    provider_name = "fake"
+
+    def __init__(self, model_name: str, *, local_files_only: bool = True) -> None:
+        super().__init__(model_name)
+
+    def encode(self, texts):
+        vectors = []
+        for text in texts:
+            lowered = text.lower()
+            if "burger" in lowered:
+                vectors.append([1.0, 0.0, 0.0])
+            elif "fries" in lowered:
+                vectors.append([0.0, 1.0, 0.0])
+            elif "cola" in lowered:
+                vectors.append([0.0, 0.0, 1.0])
+            elif "patty" in lowered:
+                vectors.append([1.0, 0.0, 1.0])
+            elif "oil" in lowered:
+                vectors.append([0.0, 1.0, 1.0])
+            else:
+                vectors.append([0.0, 0.0, 0.0])
+        return __import__("numpy").asarray(vectors, dtype="float32")
+
+
+def test_aloha_plan_a_demo_end_to_end(monkeypatch):
+    monkeypatch.setattr(run_demo_module, "SentenceTransformerEmbeddingProvider", FakeEmbeddingProvider)
     outputs = run_demo("aloha_plan_a")
     assert len(outputs["orders"]) == 3
     assert len(outputs["checks"]) == 3
@@ -37,7 +65,8 @@ def test_aloha_plan_a_demo_end_to_end():
         assert landed_path.read_bytes() == sample_path.read_bytes()
 
 
-def test_aloha_plan_b_demo_end_to_end():
+def test_aloha_plan_b_demo_end_to_end(monkeypatch):
+    monkeypatch.setattr(run_demo_module, "SentenceTransformerEmbeddingProvider", FakeEmbeddingProvider)
     outputs = run_demo("aloha_plan_b")
     assert len(outputs["orders"]) == 3
     assert len(outputs["checks"]) == 3

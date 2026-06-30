@@ -1,0 +1,66 @@
+version: resolver_v1
+embedding:
+  model_name: sentence-transformers/all-MiniLM-L6-v2
+  local_files_only: true
+thresholds:
+  auto_accept_threshold: 0.92
+  review_threshold: 0.78
+  close_candidate_margin: 0.03
+candidate_limits:
+  top_k: 10
+weights:
+  vector_similarity: 0.45
+  token_similarity: 0.25
+  char_similarity: 0.20
+  category_bonus: 0.05
+  price_or_uom_bonus: 0.05
+token_lexicon:
+  abbreviations:
+    sm: small
+    sml: small
+    md: medium
+    med: medium
+    lg: large
+    lrg: large
+    clsic: classic
+    clsc: classic
+    burg: burger
+    burgr: burger
+  misspellings:
+    frise: fries
+    frises: fries
+    friez: fries
+    pattie: patty
+    patties: patty
+  size_tokens:
+    - small
+    - medium
+    - large
+  modifier_tokens:
+    - combo
+    - deluxe
+    - basket
+    - regular
+    - house
+store_overrides:
+  toast-la-001:
+    inventory:
+      "filter oil":
+        normalized_item_key: fry_oil
+        normalized_item_name: Fryer Oil
+        confidence: 0.995
+cleaned_name_aliases:
+  line_item:
+    "medium fries":
+      normalized_item_key: fries_medium
+      normalized_item_name: Medium Fries
+      confidence: 0.98
+    "cola":
+      normalized_item_key: soda_cola
+      normalized_item_name: Cola
+      confidence: 0.98
+  inventory:
+    "fryer oil":
+      normalized_item_key: fry_oil
+      normalized_item_name: Fryer Oil
+      confidence: 0.98

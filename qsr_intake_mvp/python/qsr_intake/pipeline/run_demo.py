@@ -13,6 +13,7 @@ from qsr_intake.connectors.api_orders_connector import ApiOrdersConnector
 from qsr_intake.connectors.csv_labor_connector import CsvLaborConnector
 from qsr_intake.connectors.inventory_report_connector import InventoryReportConnector
 from qsr_intake.normalization.normalizer import NormalizationContext, Normalizer
+from qsr_intake.normalization.resolver import CatalogResolver, SentenceTransformerEmbeddingProvider
 from qsr_intake.pipeline.landing import LandingArtifacts, build_batch_id
 from qsr_intake.storage import LocalObjectStore
 from qsr_intake.utils import write_jsonl
@@ -44,6 +45,7 @@ def run_demo(scenario: str = "core") -> Dict[str, List[dict]]:
 def _run_core_demo(landing: LandingArtifacts) -> None:
     configs = [
         (load_yaml(SAMPLE_DIR / "configs" / "api_orders_connector.yml"), ApiOrdersConnector()),
+        (load_yaml(SAMPLE_DIR / "configs" / "api_orders_connector_chi.yml"), ApiOrdersConnector()),
         (load_yaml(SAMPLE_DIR / "configs" / "csv_labor_connector.yml"), CsvLaborConnector()),
         (load_yaml(SAMPLE_DIR / "configs" / "inventory_report_connector.yml"), InventoryReportConnector()),
     ]
@@ -115,10 +117,28 @@ def _run_connector_batch(landing: LandingArtifacts, config: dict, connector: obj
 def _normalize_outputs(staged_records: List[dict]) -> Dict[str, List[dict]]:
     store_crosswalk = load_yaml(SAMPLE_DIR / "configs" / "store_crosswalks.yml")
     item_alias_doc = load_yaml(SAMPLE_DIR / "configs" / "item_aliases.yml")
+    catalog_doc = load_yaml(SAMPLE_DIR / "configs" / "canonical_item_catalog.yml")
+    resolver_config = load_yaml(SAMPLE_DIR / "configs" / "normalization_resolver.yml")
+    resolver_config = {
+        **resolver_config,
+        "catalog_version": catalog_doc.get("version", "catalog_v1"),
+    }
+    embedding_doc = resolver_config.get("embedding", {})
+    embedding_provider = SentenceTransformerEmbeddingProvider(
+        embedding_doc.get("model_name", "sentence-transformers/all-MiniLM-L6-v2"),
+        local_files_only=bool(embedding_doc.get("local_files_only", True)),
+    )
+    item_resolver = CatalogResolver(
+        item_aliases=item_alias_doc["items"],
+        canonical_catalog=catalog_doc.get("items", []),
+        resolver_config=resolver_config,
+        embedding_provider=embedding_provider,
+    )
     context = NormalizationContext(
         customer_id="clave-demo",
         store_crosswalk=store_crosswalk["stores"],
         item_aliases=item_alias_doc["items"],
+        item_resolver=item_resolver,
     )
     normalizer = Normalizer(context)
     return normalizer.normalize(staged_records)

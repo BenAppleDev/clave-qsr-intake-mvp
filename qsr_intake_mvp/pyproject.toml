@@ -8,8 +8,10 @@ version = "0.1.0"
 description = "QSR intake and normalization MVP scaffold"
 requires-python = ">=3.11"
 dependencies = [
+  "numpy>=1.26",
   "PyYAML>=6.0",
   "psycopg[binary]>=3.1",
+  "sentence-transformers>=3.0",
 ]
 
 [tool.setuptools]

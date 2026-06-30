@@ -1,7 +1,17 @@
 .venv/
+qsr_intake_mvp/.venv/
 __pycache__/
 *.pyc
 .pytest_cache/
 .DS_Store
 demo_artifacts/
+qsr_intake_mvp/demo_artifacts/
 .env
+.env.*
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.python-version
+summary.json

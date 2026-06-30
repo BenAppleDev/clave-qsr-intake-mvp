@@ -4,6 +4,8 @@ services:
   postgres:
     image: postgres:16
     environment:
+      # Demo-only local credentials for disposable development use.
+      # Do not reuse these values for shared, hosted, or production systems.
       POSTGRES_DB: qsr_intake
       POSTGRES_USER: qsr
       POSTGRES_PASSWORD: qsr
@@ -16,6 +18,8 @@ services:
     image: minio/minio
     command: server /data --console-address ":9001"
     environment:
+      # Demo-only local credentials for disposable development use.
+      # Do not reuse these values for shared, hosted, or production systems.
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: minio123
     ports:

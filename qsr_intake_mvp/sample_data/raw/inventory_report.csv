@@ -2,3 +2,6 @@ source_inventory_event_id,source_store_id,source_item_code,source_item_name,even
 inv_7001,toast-nyc-001,BURGER_PATTY,Beef Patty,receive,50,each,1.20,2026-03-01T08:00:00-05:00,po_9001
 inv_7002,toast-nyc-001,BURGER_PATTY,Beef Patty,sale_depletion,-18,each,1.20,2026-03-01T23:50:00-05:00,close_0301
 inv_7003,toast-nyc-001,FRY_OIL,Fryer Oil,waste,-2,liters,4.50,2026-03-01T21:15:00-05:00,waste_0301
+inv_7004,toast-chi-001,CHI_INV_PAT,Beef Pattie*,receive,40,each,1.25,2026-03-02T07:40:00-06:00,po_9002
+inv_7005,toast-la-001,LA_OIL_01,Filter Oil,waste,-1,liters,4.75,2026-03-02T22:10:00-08:00,waste_0302
+inv_7006,toast-la-001,LA_MYST_02,Kitchen Stardust,receive,5,bag,2.10,2026-03-02T09:00:00-08:00,prep_0302

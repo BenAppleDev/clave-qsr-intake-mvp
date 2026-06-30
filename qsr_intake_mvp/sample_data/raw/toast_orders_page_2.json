@@ -1,0 +1,121 @@
+{
+  "storeId": "toast-chi-001",
+  "businessDate": "2026-03-02",
+  "orders": [
+    {
+      "guid": "ord_2001",
+      "openedDate": "2026-03-02T12:08:00-06:00",
+      "closedDate": "2026-03-02T12:16:00-06:00",
+      "state": "CLOSED",
+      "channel": "IN_STORE",
+      "totals": {
+        "gross": 13.34,
+        "net": 14.47,
+        "tax": 1.13,
+        "discount": 0.00,
+        "tip": 0.00,
+        "refund": 0.00,
+        "void": 0.00
+      },
+      "checks": [
+        {
+          "guid": "chk_3001",
+          "openedDate": "2026-03-02T12:08:00-06:00",
+          "closedDate": "2026-03-02T12:16:00-06:00",
+          "state": "CLOSED",
+          "amount": {
+            "subtotal": 13.34,
+            "tax": 1.13,
+            "total": 14.47
+          },
+          "selections": [
+            {
+              "guid": "li_4001",
+              "itemCode": "CHI_BURG_900",
+              "displayName": "Lrg Clsc Burg*r",
+              "quantity": 1,
+              "unitPrice": 9.39,
+              "tax": 0.80,
+              "voided": false,
+              "comped": false,
+              "menuCategory": "Entrees"
+            },
+            {
+              "guid": "li_4002",
+              "itemCode": "CHI_SIDE_901",
+              "displayName": "Fries??",
+              "quantity": 1,
+              "unitPrice": 3.95,
+              "tax": 0.33,
+              "voided": false,
+              "comped": false,
+              "menuCategory": "Sides"
+            }
+          ],
+          "payments": [
+            {
+              "guid": "pay_5001",
+              "type": "CREDIT_CARD",
+              "amount": 14.47,
+              "tipAmount": 0.00,
+              "capturedAt": "2026-03-02T12:16:06-06:00",
+              "status": "CAPTURED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "guid": "ord_2002",
+      "openedDate": "2026-03-02T13:02:00-06:00",
+      "closedDate": "2026-03-02T13:09:00-06:00",
+      "state": "CLOSED",
+      "channel": "DELIVERY",
+      "totals": {
+        "gross": 5.75,
+        "net": 6.22,
+        "tax": 0.47,
+        "discount": 0.00,
+        "tip": 0.00,
+        "refund": 0.00,
+        "void": 0.00
+      },
+      "checks": [
+        {
+          "guid": "chk_3002",
+          "openedDate": "2026-03-02T13:02:00-06:00",
+          "closedDate": "2026-03-02T13:09:00-06:00",
+          "state": "CLOSED",
+          "amount": {
+            "subtotal": 5.75,
+            "tax": 0.47,
+            "total": 6.22
+          },
+          "selections": [
+            {
+              "guid": "li_4003",
+              "itemCode": "CHI_DRINK_902",
+              "displayName": "Nebula Slush",
+              "quantity": 1,
+              "unitPrice": 5.75,
+              "tax": 0.47,
+              "voided": false,
+              "comped": false,
+              "menuCategory": "Beverages"
+            }
+          ],
+          "payments": [
+            {
+              "guid": "pay_5002",
+              "type": "CREDIT_CARD",
+              "amount": 6.22,
+              "tipAmount": 0.00,
+              "capturedAt": "2026-03-02T13:09:05-06:00",
+              "status": "CAPTURED"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

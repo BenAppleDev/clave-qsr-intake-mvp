@@ -18,6 +18,8 @@ def build_record_metadata(
     entity_confidence_score: float,
     anomaly_flags: dict | None = None,
     normalization_exceptions: dict | None = None,
+    human_review_required: bool = False,
+    human_review_status: str = "not_required",
 ) -> Dict[str, Any]:
     source_event_at = staged_record.get("source_event_at")
     extracted_at = staged_record.get("staged_at")
@@ -49,7 +51,7 @@ def build_record_metadata(
         "entity_confidence_score": entity_confidence_score,
         "anomaly_flags": anomaly_flags or {},
         "normalization_exceptions": normalization_exceptions or {},
-        "human_review_required": False,
-        "human_review_status": "not_required",
+        "human_review_required": human_review_required,
+        "human_review_status": human_review_status,
         "rule_version": "v1",
     }

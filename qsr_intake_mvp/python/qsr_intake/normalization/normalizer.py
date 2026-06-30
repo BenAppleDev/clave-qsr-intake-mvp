@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Tuple
 
 from qsr_intake.normalization.metadata import build_record_metadata
+from qsr_intake.normalization.resolver import CatalogResolver, ResolutionResult
 from qsr_intake.utils import deterministic_uuid, stable_hash, utc_now_iso
 
 
@@ -14,6 +15,7 @@ class NormalizationContext:
     customer_id: str
     store_crosswalk: Dict[str, Dict[str, Any]]
     item_aliases: Dict[str, Dict[str, Any]]
+    item_resolver: CatalogResolver | None = None
     mapping_rule_set_id: str = "default_qsr_rules_v1"
 
 
@@ -119,7 +121,18 @@ class Normalizer:
                 return row
         raise RuntimeError("Business day lookup failed")
 
-    def _append_metadata(self, record_uid: str, record_type: str, staged_record: Dict[str, Any], quality_score: float = 1.0, entity_confidence_score: float = 1.0, anomaly_flags: dict | None = None, normalization_exceptions: dict | None = None) -> None:
+    def _append_metadata(
+        self,
+        record_uid: str,
+        record_type: str,
+        staged_record: Dict[str, Any],
+        quality_score: float = 1.0,
+        entity_confidence_score: float = 1.0,
+        anomaly_flags: dict | None = None,
+        normalization_exceptions: dict | None = None,
+        human_review_required: bool = False,
+        human_review_status: str = "not_required",
+    ) -> None:
         metadata = build_record_metadata(
             record_uid=record_uid,
             record_type=record_type,
@@ -132,6 +145,8 @@ class Normalizer:
             entity_confidence_score=entity_confidence_score,
             anomaly_flags=anomaly_flags,
             normalization_exceptions=normalization_exceptions,
+            human_review_required=human_review_required,
+            human_review_status=human_review_status,
         )
         self.outputs["record_metadata"].append(metadata)
 
@@ -202,11 +217,14 @@ class Normalizer:
         line_id = deterministic_uuid("line_item", check_id, payload["source_line_id"])
         if line_id in self._line_items_seen:
             return
-        alias = self.context.item_aliases.get(payload["source_item_code"], {
-            "normalized_item_key": payload["source_item_code"].lower(),
-            "normalized_item_name": payload["display_name"],
-            "confidence": 0.75,
-        })
+        resolution = self._resolve_catalog_item(
+            domain="line_item",
+            store_id=payload["source_store_id"],
+            source_item_code=payload.get("source_item_code"),
+            source_name=payload.get("display_name"),
+            menu_category=payload.get("menu_category"),
+            unit_price=float(payload["unit_price"]),
+        )
         row = {
             "line_item_id": line_id,
             "record_uid": deterministic_uuid("line_item_record", line_id),
@@ -216,8 +234,8 @@ class Normalizer:
             "source_line_id": payload["source_line_id"],
             "source_item_code": payload["source_item_code"],
             "display_name": payload["display_name"],
-            "normalized_item_name": alias["normalized_item_name"],
-            "normalized_item_key": alias["normalized_item_key"],
+            "normalized_item_name": resolution.normalized_item_name,
+            "normalized_item_key": resolution.normalized_item_key,
             "quantity": float(payload["quantity"]),
             "unit_price": float(payload["unit_price"]),
             "extended_price": round(float(payload["quantity"]) * float(payload["unit_price"]), 2),
@@ -231,7 +249,15 @@ class Normalizer:
         }
         self.outputs["line_items"].append(row)
         self._line_items_seen.add(line_id)
-        self._append_metadata(row["record_uid"], "line_item", staged, entity_confidence_score=alias.get("confidence", 0.75))
+        self._append_metadata(
+            row["record_uid"],
+            "line_item",
+            staged,
+            entity_confidence_score=resolution.confidence,
+            normalization_exceptions={"resolver": resolution.debug_metadata},
+            human_review_required=resolution.human_review_required,
+            human_review_status=resolution.human_review_status,
+        )
 
     def _normalize_payment(self, staged: Dict[str, Any]) -> None:
         payload = staged["staged_payload"]
@@ -322,11 +348,13 @@ class Normalizer:
         inv_id = deterministic_uuid("inventory_event", store["store_id"], payload["source_inventory_event_id"])
         if inv_id in self._inventory_seen:
             return
-        alias = self.context.item_aliases.get(payload["source_item_code"], {
-            "normalized_item_key": payload["source_item_code"].lower(),
-            "normalized_item_name": payload["source_item_name"],
-            "confidence": 0.75,
-        })
+        resolution = self._resolve_catalog_item(
+            domain="inventory",
+            store_id=payload["source_store_id"],
+            source_item_code=payload.get("source_item_code"),
+            source_name=payload.get("source_item_name"),
+            unit_of_measure=payload.get("unit_of_measure"),
+        )
         row = {
             "inventory_event_id": inv_id,
             "record_uid": deterministic_uuid("inventory_record", inv_id),
@@ -335,8 +363,8 @@ class Normalizer:
             "business_day_id": business_day["business_day_id"],
             "source_inventory_event_id": payload["source_inventory_event_id"],
             "source_item_code": payload["source_item_code"],
-            "normalized_item_name": alias["normalized_item_name"],
-            "normalized_item_key": alias["normalized_item_key"],
+            "normalized_item_name": resolution.normalized_item_name,
+            "normalized_item_key": resolution.normalized_item_key,
             "event_type": payload["event_type"],
             "quantity_delta": float(payload["quantity_delta"]),
             "unit_of_measure": payload["unit_of_measure"],
@@ -348,7 +376,69 @@ class Normalizer:
         }
         self.outputs["inventory_events"].append(row)
         self._inventory_seen.add(inv_id)
-        self._append_metadata(row["record_uid"], "inventory_event", staged, entity_confidence_score=alias.get("confidence", 0.75))
+        self._append_metadata(
+            row["record_uid"],
+            "inventory_event",
+            staged,
+            entity_confidence_score=resolution.confidence,
+            normalization_exceptions={"resolver": resolution.debug_metadata},
+            human_review_required=resolution.human_review_required,
+            human_review_status=resolution.human_review_status,
+        )
+
+    def _resolve_catalog_item(
+        self,
+        *,
+        domain: str,
+        store_id: str,
+        source_item_code: str | None,
+        source_name: str | None,
+        menu_category: str | None = None,
+        unit_price: float | None = None,
+        unit_of_measure: str | None = None,
+    ) -> ResolutionResult:
+        if self.context.item_resolver is not None:
+            return self.context.item_resolver.resolve(
+                domain=domain,
+                source_store_id=store_id,
+                source_item_code=source_item_code,
+                source_name=source_name,
+                menu_category=menu_category,
+                unit_price=unit_price,
+                unit_of_measure=unit_of_measure,
+            )
+        fallback_name = source_name or source_item_code or "Unknown Item"
+        fallback_key = stable_hash([domain, store_id, source_item_code, fallback_name])[:16]
+        alias = self.context.item_aliases.get(source_item_code or "", {
+            "normalized_item_key": fallback_key,
+            "normalized_item_name": fallback_name,
+            "confidence": 0.75,
+        })
+        return ResolutionResult(
+            normalized_item_key=str(alias["normalized_item_key"]),
+            normalized_item_name=str(alias["normalized_item_name"]),
+            confidence=float(alias.get("confidence", 0.75)),
+            status="matched",
+            method="source_code_alias",
+            human_review_required=False,
+            human_review_status="not_required",
+            debug_metadata={
+                "status": "matched",
+                "method": "source_code_alias",
+                "source_cleaned_name": fallback_name.lower(),
+                "domain": domain,
+                "chosen_key": str(alias["normalized_item_key"]),
+                "top_candidates": [],
+                "token_similarity": 1.0,
+                "vector_similarity": 1.0,
+                "char_similarity": 1.0,
+                "category_bonus": 0.0,
+                "price_or_uom_bonus": 0.0,
+                "store_override_applied": False,
+                "catalog_version": "not_loaded",
+                "resolver_version": "legacy",
+            },
+        )
 
     def _derive_daily_metrics(self) -> None:
         orders_by_bd = defaultdict(list)
